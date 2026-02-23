@@ -1,0 +1,9 @@
+  .header {
+    display: flex;
+    color:blue;
+    justify-content: center;
+}
+
+.container {
+  display: flex;
+}
