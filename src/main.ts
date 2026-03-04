@@ -91,23 +91,43 @@ form.addEventListener("submit", (event) => {
     strroot3.textContent = root3.toString();
     return;
   }
+
+  console.log("Root 1:", root1);
+  console.log("Root 2:", root2);
+  console.log("Root 3:", root3);
+  console.log("Delta:", delta);
+  console.log("P:", p);
+  console.log("Q:", q);
+  function cleanReal(z: Complex): string {
+    if (Math.abs(z.im) < 1e-10) {
+      return Number(z.re.toFixed(12)).toString();
+    }
+    return "complex root";
+  }
+
   if (delta > 0) {
-    strroot1.textContent = root1.re.toString();
+    const sqrtDeltaReal = Math.sqrt(delta);
+    const u = Math.cbrt(-q / 2 + sqrtDeltaReal);
+    const v = Math.cbrt(-q / 2 - sqrtDeltaReal);
+    const t1: Complex = { re: u + v, im: 0 };
+    const root1 = C.sub(t1, { re: shift, im: 0 });
+    strroot1.textContent = cleanReal(root1);
+    strroot1.textContent = cleanReal(root1);
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
   } else if (delta == 0) {
     if (p === 0 && q === 0) {
-      strroot1.textContent = root1.re.toString();
-      strroot2.textContent = root2.re.toString();
-      strroot3.textContent = root3.re.toString();
+      strroot1.textContent = cleanReal(root1);
+      strroot2.textContent = cleanReal(root2);
+      strroot3.textContent = cleanReal(root3);
     } else {
-      strroot1.textContent = root1.re.toString();
-      strroot2.textContent = root2.re.toString();
-      strroot3.textContent = root3.re.toString();
+      strroot1.textContent = cleanReal(root1);
+      strroot2.textContent = cleanReal(root2);
+      strroot3.textContent = cleanReal(root3);
     }
   } else {
-    strroot1.textContent = root1.re.toString();
-    strroot2.textContent = root2.re.toString();
-    strroot3.textContent = root3.re.toString();
+    strroot1.textContent = cleanReal(root1);
+    strroot2.textContent = cleanReal(root2);
+    strroot3.textContent = cleanReal(root3);
   }
 });
