@@ -1,12 +1,12 @@
 import "./style.css";
 const form = document.getElementById("cubic-form") as HTMLFormElement;
-const pValue = document.getElementById("p-value") as HTMLTableElement;
+const pValue = document.getElementById("p-value") as HTMLElement;
 const qValue = document.getElementById("q-value") as HTMLElement;
 const discriminant = document.getElementById("discriminant") as HTMLElement;
 const value = document.getElementById("value") as HTMLElement;
-const root1 = document.getElementById("value") as HTMLElement;
-const root2 = document.getElementById("value") as HTMLElement;
-const root3 = document.getElementById("value") as HTMLElement;
+const strroot1 = document.getElementById("root1") as HTMLElement;
+const strroot2 = document.getElementById("root2") as HTMLElement;
+const strroot3 = document.getElementById("root3") as HTMLElement;
 
 // Complex number type
 type Complex = { re: number; im: number };
@@ -34,11 +34,12 @@ const C = {
     };
   },
   cbrt: (z: Complex): Complex => {
-    const r = Math.sqrt(z.re * z.re + z.im * z.im);
+    const r = Math.hypot(z.re, z.im);
     const theta = Math.atan2(z.im, z.re);
+    const mag = Math.cbrt(r);
     return {
-      re: Math.cbrt(r) * Math.cos(theta / 3),
-      im: Math.cbrt(r) * Math.sin(theta / 3),
+      re: mag * Math.cos(theta / 3),
+      im: mag * Math.sin(theta / 3),
     };
   },
 };
@@ -48,6 +49,7 @@ const omega: Complex = { re: -0.5, im: Math.sqrt(3) / 2 };
 const omega2: Complex = { re: -0.5, im: -Math.sqrt(3) / 2 };
 
 form.addEventListener("submit", (event) => {
+  event.preventDefault();
   const formData = new FormData(form);
   const a: number = Number(formData.get("a"));
   const b: number = Number(formData.get("b"));
@@ -67,23 +69,45 @@ form.addEventListener("submit", (event) => {
   const t1: Complex = C.add(u, v);
   const t2: Complex = C.add(C.mul(omega, u), C.mul(omega2, v));
   const t3: Complex = C.add(C.mul(omega2, u), C.mul(omega, v));
-  const root1: Complex = C.add(t1, { re: shift, im: 0 });
-  const root2: Complex = C.add(t2, { re: shift, im: 0 });
-  const root3: Complex = C.add(t3, { re: shift, im: 0 });
-  console.log(pValue.textContent);
-  pValue.textContent = p.toString()
+  const root1: Complex = C.sub(t1, { re: shift, im: 0 });
+  const root2: Complex = C.sub(t2, { re: shift, im: 0 });
+  const root3: Complex = C.sub(t3, { re: shift, im: 0 });
+  pValue.textContent = p.toString();
+  qValue.textContent = q.toString();
+  discriminant.textContent = delta.toString();
+  if (Math.abs(delta) < 1e-12) {
+    const u = Math.cbrt(-q / 2);
 
+    const t1 = 2 * u;
+    const t2 = -u;
+    const t3 = -u;
+
+    const root1 = t1 - shift;
+    const root2 = t2 - shift;
+    const root3 = t3 - shift;
+
+    strroot1.textContent = root1.toString();
+    strroot2.textContent = root2.toString();
+    strroot3.textContent = root3.toString();
+    return;
+  }
   if (delta > 0) {
-    console.log("One real root:", root1.re);
-    console.log("Two complex roots:", root2, root3);
-  } else if (delta === 0) {
+    strroot1.textContent = root1.re.toString();
+    strroot2.textContent = "complex root";
+    strroot3.textContent = "complex root";
+  } else if (delta == 0) {
     if (p === 0 && q === 0) {
-      console.log("Triple root:", root1.re);
+      strroot1.textContent = root1.re.toString();
+      strroot2.textContent = root2.re.toString();
+      strroot3.textContent = root3.re.toString();
     } else {
-      console.log("Double root:", root1.re);
-      console.log("Simple root:", root2.re);
+      strroot1.textContent = root1.re.toString();
+      strroot2.textContent = root2.re.toString();
+      strroot3.textContent = root3.re.toString();
     }
   } else {
-    console.log("Three distinct real roots:", root1.re, root2.re, root3.re);
+    strroot1.textContent = root1.re.toString();
+    strroot2.textContent = root2.re.toString();
+    strroot3.textContent = root3.re.toString();
   }
 });
