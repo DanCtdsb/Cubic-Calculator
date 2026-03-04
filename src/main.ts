@@ -3,14 +3,28 @@ const form = document.getElementById("cubic-form") as HTMLFormElement;
 const pValue = document.getElementById("p-value") as HTMLElement;
 const qValue = document.getElementById("q-value") as HTMLElement;
 const discriminant = document.getElementById("discriminant") as HTMLElement;
-const value = document.getElementById("value") as HTMLElement;
 const strroot1 = document.getElementById("root1") as HTMLElement;
 const strroot2 = document.getElementById("root2") as HTMLElement;
 const strroot3 = document.getElementById("root3") as HTMLElement;
+const equation = document.getElementById("equation") as HTMLElement;
 
 // Complex number type
 type Complex = { re: number; im: number };
 
+const equationFunction = (a: number, b: number, c: number, d: number) => {
+  return (
+    (Math.abs(a) == 1 ? "x\u00b3 " : a + "x\u00b3 ") +
+    (b != 0
+      ? (b > 0 ? " + " : " - ") +
+        (Math.abs(b) === 1 ? "x\u00b2 " : Math.abs(b) + "x\u00b2 ")
+      : "") +
+    (c != 0
+      ? (c > 0 ? " + " : " - ") +
+        (Math.abs(c) === 1 ? "x " : Math.abs(c) + "x ")
+      : "") +
+    (d != 0 ? (d > 0 ? " + " : " - ") + Math.abs(d) : "")
+  );
+};
 // Object containing operations for complex numbers, because TypeScript does not support operator overloading
 const C = {
   add: (z1: Complex, z2: Complex): Complex => ({
@@ -75,6 +89,7 @@ form.addEventListener("submit", (event) => {
   pValue.textContent = p.toString();
   qValue.textContent = q.toString();
   discriminant.textContent = delta.toString();
+  equation.textContent = equationFunction(a, b, c, d);
   if (Math.abs(delta) < 1e-12) {
     const u = Math.cbrt(-q / 2);
 
@@ -111,7 +126,6 @@ form.addEventListener("submit", (event) => {
     const v = Math.cbrt(-q / 2 - sqrtDeltaReal);
     const t1: Complex = { re: u + v, im: 0 };
     const root1 = C.sub(t1, { re: shift, im: 0 });
-    strroot1.textContent = cleanReal(root1);
     strroot1.textContent = cleanReal(root1);
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";

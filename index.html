@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> Cubic Calculator</title>
   </head>
-  <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
     <h1 class="header">Cubic Calculator</h1>
@@ -21,6 +20,9 @@
         <input type="text" id="d" name="d" required>
         <button type="submit">Evaluate</button> 
       </form>
+    </div>
+    <div>
+      <h1 id="equation"></h1>
     </div>
     <table>
       <tr>
@@ -38,6 +40,9 @@
       <tr>
         <th>Value</th>
         <td id = "value"></td>
+        <td>x</td>
+        <td>y</td>
+
       </tr>
       <tr>
         <th>Root 1</th>
