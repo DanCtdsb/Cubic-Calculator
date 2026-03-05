@@ -1,9 +1,80 @@
-  .header {
-    display: flex;
-    color:blue;
-    justify-content: center;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f8ff; /* very light blue */
+  margin: 0;
+  padding: 20px;
+  color: #003366; /* deep blue text */
+}
+
+.header {
+  text-align: center;
+  color: #0055cc; /* brighter blue */
+  margin-bottom: 20px;
 }
 
 .container {
   display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+form {
+  background: #e6f0ff; /* soft blue panel */
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #bcd0ff;
+}
+
+label {
+  margin-right: 5px;
+  color: #003366;
+}
+
+input {
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #99b7ff;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #0055cc;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #003f99;
+}
+
+table {
+  width: 60%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: #ffffff;
+  border: 1px solid #bcd0ff;
+}
+
+th, td {
+  border: 1px solid #bcd0ff;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #d9e8ff;
+  color: #003366;
+}
+
+td {
+  background-color: #f7faff;
+}
+
+#equation {
+  text-align: center;
+  font-size: 1.2em;
+  color: #003366;
 }
