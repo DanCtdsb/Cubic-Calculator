@@ -78,3 +78,8 @@ td {
   font-size: 1.2em;
   color: #003366;
 }
+
+#graph {
+  display: flex;
+  justify-content: center;
+}

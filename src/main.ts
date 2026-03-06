@@ -39,7 +39,7 @@ const drawGraph = (a: number, b: number, c: number, d: number) => {
   }
   ctx.stroke();
   ctx.beginPath();
-  ctx.lineWidth = 0.2;
+  ctx.lineWidth = 0.3;
   ctx.strokeStyle = "#000";
   for (let i = 0; i <= width; i += 20) {
     ctx.moveTo(i, 0);
@@ -53,7 +53,7 @@ const drawGraph = (a: number, b: number, c: number, d: number) => {
 
   ctx.beginPath();
   ctx.lineWidth = 2;
-  ctx.strokeStyle = "rgb(255, 140, 0)";
+  ctx.strokeStyle = "#0055cc";
 
   const scaleX = 20;
   const scaleY = 20;
