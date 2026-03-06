@@ -7,9 +7,70 @@ const strroot1 = document.getElementById("root1") as HTMLElement;
 const strroot2 = document.getElementById("root2") as HTMLElement;
 const strroot3 = document.getElementById("root3") as HTMLElement;
 const equation = document.getElementById("equation") as HTMLElement;
+const canvas = document.getElementById("graph") as HTMLCanvasElement;
+const ctx = canvas.getContext("2d")!;
 
 // Complex number type
 type Complex = { re: number; im: number };
+
+const drawGraph = (a: number, b: number, c: number, d: number) => {
+  const width = canvas.width;
+  const height = canvas.height;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, width, height);
+
+  const x0 = width / 2;
+  const y0 = height / 2;
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, x0);
+  ctx.lineTo(width, x0);
+  ctx.moveTo(y0, 0);
+  ctx.lineTo(y0, height);
+  for (let i = 0; i <= width; i += 20) {
+    ctx.moveTo(i, x0 - 5);
+    ctx.lineTo(i, x0 + 5);
+  }
+  for (let i = 0; i <= height; i += 20) {
+    ctx.moveTo(y0 - 5, i);
+    ctx.lineTo(y0 + 5, i);
+  }
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.lineWidth = 0.2;
+  ctx.strokeStyle = "#000";
+  for (let i = 0; i <= width; i += 20) {
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i, height);
+  }
+  for (let i = 0; i <= height; i += 20) {
+    ctx.moveTo(0, i);
+    ctx.lineTo(width, i);
+  }
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgb(255, 140, 0)";
+
+  const scaleX = 20;
+  const scaleY = 20;
+  let first = true;
+
+  for (let px = 0; px <= width; px++) {
+    const x = (px - x0) / scaleX;
+    const y = a * x * x * x + b * x * x + c * x + d;
+    const py = y0 - y * scaleY;
+    if (first) {
+      ctx.moveTo(px, py);
+      first = false;
+    }
+    ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+};
 
 const equationFunction = (a: number, b: number, c: number, d: number) => {
   return (
@@ -69,6 +130,7 @@ form.addEventListener("submit", (event) => {
   const b: number = Number(formData.get("b"));
   const c: number = Number(formData.get("c"));
   const d: number = Number(formData.get("d"));
+  drawGraph(a, b, c, d);
 
   const p: number = (3 * a * c - b * b) / (3 * a * a);
   const q: number =
