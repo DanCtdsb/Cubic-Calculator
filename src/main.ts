@@ -8,6 +8,11 @@ const strroot2 = document.getElementById("root2") as HTMLElement;
 const strroot3 = document.getElementById("root3") as HTMLElement;
 const equation = document.getElementById("equation") as HTMLElement;
 const canvas = document.getElementById("graph") as HTMLCanvasElement;
+const y1 = document.getElementById("y1") as HTMLCanvasElement;
+const y2 = document.getElementById("y1") as HTMLCanvasElement;
+const y3 = document.getElementById("y1") as HTMLCanvasElement;
+
+
 const ctx = canvas.getContext("2d")!;
 
 // Complex number type
@@ -166,15 +171,12 @@ form.addEventListener("submit", (event) => {
     strroot1.textContent = root1.toString();
     strroot2.textContent = root2.toString();
     strroot3.textContent = root3.toString();
+    y1.textContent = "0";
+    y2.textContent = "0";
+    y3.textContent = "0";
     return;
   }
 
-  console.log("Root 1:", root1);
-  console.log("Root 2:", root2);
-  console.log("Root 3:", root3);
-  console.log("Delta:", delta);
-  console.log("P:", p);
-  console.log("Q:", q);
   function cleanReal(z: Complex): string {
     if (Math.abs(z.im) < 1e-10) {
       return Number(z.re.toFixed(12)).toString();
@@ -191,6 +193,11 @@ form.addEventListener("submit", (event) => {
     strroot1.textContent = cleanReal(root1);
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
+    y1.textContent = "0";
+    y2.textContent = "complex root";
+    y3.textContent = "complex root";
+
+
   } else if (delta == 0) {
     if (p === 0 && q === 0) {
       strroot1.textContent = cleanReal(root1);
