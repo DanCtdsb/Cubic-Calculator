@@ -8,10 +8,9 @@ const strroot2 = document.getElementById("root2") as HTMLElement;
 const strroot3 = document.getElementById("root3") as HTMLElement;
 const equation = document.getElementById("equation") as HTMLElement;
 const canvas = document.getElementById("graph") as HTMLCanvasElement;
-const y1 = document.getElementById("y1") as HTMLCanvasElement;
-const y2 = document.getElementById("y1") as HTMLCanvasElement;
-const y3 = document.getElementById("y1") as HTMLCanvasElement;
-
+const y1 = document.getElementById("y1") as HTMLElement;
+const y2 = document.getElementById("y2") as HTMLElement;
+const y3 = document.getElementById("y3") as HTMLElement;
 
 const ctx = canvas.getContext("2d")!;
 
@@ -30,10 +29,10 @@ const drawGraph = (a: number, b: number, c: number, d: number) => {
   ctx.strokeStyle = "#000";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0, x0);
-  ctx.lineTo(width, x0);
-  ctx.moveTo(y0, 0);
-  ctx.lineTo(y0, height);
+  ctx.moveTo(0, y0);
+  ctx.lineTo(width, y0);
+  ctx.moveTo(x0, 0);
+  ctx.lineTo(x0, height);
   for (let i = 0; i <= width; i += 20) {
     ctx.moveTo(i, x0 - 5);
     ctx.lineTo(i, x0 + 5);
@@ -78,33 +77,38 @@ const drawGraph = (a: number, b: number, c: number, d: number) => {
 };
 
 const equationFunction = (a: number, b: number, c: number, d: number) => {
-  return (
-    (Math.abs(a) == 1 ? "x\u00b3 " : a + "x\u00b3 ") +
-    (b != 0
-      ? (b > 0 ? " + " : " - ") +
-        (Math.abs(b) === 1 ? "x\u00b2 " : Math.abs(b) + "x\u00b2 ")
-      : "") +
-    (c != 0
-      ? (c > 0 ? " + " : " - ") +
-        (Math.abs(c) === 1 ? "x " : Math.abs(c) + "x ")
-      : "") +
-    (d != 0 ? (d > 0 ? " + " : " - ") + Math.abs(d) : "")
-  );
+  const t = [];
+
+  t.push(a === 1 ? "x³" : `${a}x³`);
+  if (b !== 0)
+    t.push(
+      `${b > 0 ? "+" : "-"} ${Math.abs(b) === 1 ? "x²" : Math.abs(b) + "x²"}`,
+    );
+  if (c !== 0)
+    t.push(
+      `${c > 0 ? "+" : "-"} ${Math.abs(c) === 1 ? "x" : Math.abs(c) + "x"}`,
+    );
+  if (d !== 0) t.push(`${d > 0 ? "+" : "-"} ${Math.abs(d)}`);
+
+  return t.join(" ");
 };
-// Object containing operations for complex numbers, because TypeScript does not support operator overloading
+// Object containing operations for complex numbers, because TypeScript does not support operations on complex numbers
 const C = {
   add: (z1: Complex, z2: Complex): Complex => ({
     re: z1.re + z2.re,
     im: z1.im + z2.im,
   }),
+
   sub: (z1: Complex, z2: Complex): Complex => ({
     re: z1.re - z2.re,
     im: z1.im - z2.im,
   }),
+
   mul: (z1: Complex, z2: Complex): Complex => ({
     re: z1.re * z2.re - z1.im * z2.im,
     im: z1.re * z2.im + z1.im * z2.re,
   }),
+
   sqrt: (z: Complex): Complex => {
     const r = Math.sqrt(z.re * z.re + z.im * z.im);
     const theta = Math.atan2(z.im, z.re);
@@ -113,6 +117,7 @@ const C = {
       im: Math.sqrt(r) * Math.sin(theta / 2),
     };
   },
+
   cbrt: (z: Complex): Complex => {
     const r = Math.hypot(z.re, z.im);
     const theta = Math.atan2(z.im, z.re);
@@ -140,19 +145,8 @@ form.addEventListener("submit", (event) => {
   const p: number = (3 * a * c - b * b) / (3 * a * a);
   const q: number =
     (27 * a * a * d - 9 * a * b * c + 2 * b * b * b) / (27 * a * a * a);
-  const shift: number = b / (3 * a);
+  const shift: number = b / (3 * a); // Depressed cubic substitution: x = t - b/(3a)
   const delta: number = (q * q) / 4 + (p * p * p) / 27;
-  const sqrtDelta: Complex = C.sqrt({ re: delta, im: 0 });
-  const u3: Complex = C.add({ re: -q / 2, im: 0 }, sqrtDelta);
-  const v3: Complex = C.sub({ re: -q / 2, im: 0 }, sqrtDelta);
-  const u: Complex = C.cbrt(u3);
-  const v: Complex = C.cbrt(v3);
-  const t1: Complex = C.add(u, v);
-  const t2: Complex = C.add(C.mul(omega, u), C.mul(omega2, v));
-  const t3: Complex = C.add(C.mul(omega2, u), C.mul(omega, v));
-  const root1: Complex = C.sub(t1, { re: shift, im: 0 });
-  const root2: Complex = C.sub(t2, { re: shift, im: 0 });
-  const root3: Complex = C.sub(t3, { re: shift, im: 0 });
   pValue.textContent = p.toString();
   qValue.textContent = q.toString();
   discriminant.textContent = delta.toString();
@@ -160,28 +154,15 @@ form.addEventListener("submit", (event) => {
   if (Math.abs(delta) < 1e-12) {
     const u = Math.cbrt(-q / 2);
 
-    const t1 = 2 * u;
-    const t2 = -u;
-    const t3 = -u;
+    const root1 = 2 * u - shift;
+    const doubleRoot = -u - shift;
 
-    const root1 = t1 - shift;
-    const root2 = t2 - shift;
-    const root3 = t3 - shift;
-
-    strroot1.textContent = root1.toString();
-    strroot2.textContent = root2.toString();
-    strroot3.textContent = root3.toString();
-    y1.textContent = "0";
-    y2.textContent = "0";
-    y3.textContent = "0";
+    strroot1.textContent = Number(root1.toFixed(12)).toString();
+    strroot2.textContent = strroot3.textContent = Number(
+      doubleRoot.toFixed(12),
+    ).toString();
+    y1.textContent = y2.textContent = y3.textContent = "0";
     return;
-  }
-
-  function cleanReal(z: Complex): string {
-    if (Math.abs(z.im) < 1e-10) {
-      return Number(z.re.toFixed(12)).toString();
-    }
-    return "complex root";
   }
 
   if (delta > 0) {
@@ -190,27 +171,24 @@ form.addEventListener("submit", (event) => {
     const v = Math.cbrt(-q / 2 - sqrtDeltaReal);
     const t1: Complex = { re: u + v, im: 0 };
     const root1 = C.sub(t1, { re: shift, im: 0 });
-    strroot1.textContent = cleanReal(root1);
+    strroot1.textContent = Number(root1.re.toFixed(12)).toString();
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
     y1.textContent = "0";
-    y2.textContent = "complex root";
-    y3.textContent = "complex root";
-
-
-  } else if (delta == 0) {
-    if (p === 0 && q === 0) {
-      strroot1.textContent = cleanReal(root1);
-      strroot2.textContent = cleanReal(root2);
-      strroot3.textContent = cleanReal(root3);
-    } else {
-      strroot1.textContent = cleanReal(root1);
-      strroot2.textContent = cleanReal(root2);
-      strroot3.textContent = cleanReal(root3);
-    }
+    y2.textContent = y3.textContent = "complex root";
   } else {
-    strroot1.textContent = cleanReal(root1);
-    strroot2.textContent = cleanReal(root2);
-    strroot3.textContent = cleanReal(root3);
+    const sqrtDelta: Complex = C.sqrt({ re: delta, im: 0 });
+    const u: Complex = C.cbrt(C.add({ re: -q / 2, im: 0 }, sqrtDelta));
+    const v: Complex = C.cbrt(C.sub({ re: -q / 2, im: 0 }, sqrtDelta));
+    const t1: Complex = C.add(u, v);
+    const t2: Complex = C.add(C.mul(omega, u), C.mul(omega2, v));
+    const t3: Complex = C.add(C.mul(omega2, u), C.mul(omega, v));
+    const root1: Complex = C.sub(t1, { re: shift, im: 0 });
+    const root2: Complex = C.sub(t2, { re: shift, im: 0 });
+    const root3: Complex = C.sub(t3, { re: shift, im: 0 });
+    strroot1.textContent = Number(root1.re.toFixed(12)).toString();
+    strroot2.textContent = Number(root2.re.toFixed(12)).toString();
+    strroot3.textContent = Number(root3.re.toFixed(12)).toString();
+    y1.textContent = y2.textContent = y3.textContent = "0";
   }
 });

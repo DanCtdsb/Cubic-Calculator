@@ -1,14 +1,14 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f8ff; /* very light blue */
+  background-color: #f4f8ff;
   margin: 0;
   padding: 20px;
-  color: #003366; /* deep blue text */
+  color: #003366;
 }
 
 .header {
   text-align: center;
-  color: #0055cc; /* brighter blue */
+  color: #0055cc;
   margin-bottom: 20px;
 }
 
@@ -19,22 +19,24 @@ body {
 }
 
 form {
-  background: #e6f0ff; /* soft blue panel */
+  background: #e6f0ff;
   padding: 15px 20px;
   border-radius: 8px;
   border: 1px solid #bcd0ff;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 label {
-  margin-right: 5px;
   color: #003366;
 }
 
 input {
-  margin-right: 10px;
   padding: 5px;
   border: 1px solid #99b7ff;
   border-radius: 4px;
+  width: 70px;
 }
 
 button {
@@ -50,15 +52,30 @@ button:hover {
   background-color: #003f99;
 }
 
+#equation {
+  text-align: center;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  color: #003366;
+}
+
+.output-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 25px;
+  margin-top: 20px;
+}
+
 table {
-  width: 60%;
-  margin: 0 auto;
+  width: 350px;
   border-collapse: collapse;
   background: #ffffff;
   border: 1px solid #bcd0ff;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #bcd0ff;
   padding: 10px;
   text-align: left;
@@ -73,13 +90,7 @@ td {
   background-color: #f7faff;
 }
 
-#equation {
-  text-align: center;
-  font-size: 1.2em;
-  color: #003366;
-}
-
 #graph {
-  display: flex;
-  justify-content: center;
+  border: 1px solid #bcd0ff;
+  background: white;
 }
