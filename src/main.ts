@@ -11,8 +11,7 @@ const canvas = document.getElementById("graph") as HTMLCanvasElement;
 const y1 = document.getElementById("y1") as HTMLElement;
 const y2 = document.getElementById("y2") as HTMLElement;
 const y3 = document.getElementById("y3") as HTMLElement;
-
-const ctx = canvas.getContext("2d")!;
+const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 // Complex number type
 type Complex = { re: number; im: number };
@@ -82,11 +81,11 @@ const equationFunction = (a: number, b: number, c: number, d: number) => {
   t.push(a === 1 ? "x³" : `${a}x³`);
   if (b !== 0)
     t.push(
-      `${b > 0 ? "+" : "-"} ${Math.abs(b) === 1 ? "x²" : Math.abs(b) + "x²"}`,
+      `${b > 0 ? "+" : "-"} ${Math.abs(b) === 1 ? "x²" : Math.abs(b) + "x²"}`
     );
   if (c !== 0)
     t.push(
-      `${c > 0 ? "+" : "-"} ${Math.abs(c) === 1 ? "x" : Math.abs(c) + "x"}`,
+      `${c > 0 ? "+" : "-"} ${Math.abs(c) === 1 ? "x" : Math.abs(c) + "x"}`
     );
   if (d !== 0) t.push(`${d > 0 ? "+" : "-"} ${Math.abs(d)}`);
 
@@ -137,19 +136,22 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = new FormData(form);
   const a: number = Number(formData.get("a"));
+  if (a === 0) {
+    equation.textContent = "a value cannot be 0, invalid cubic values.";
+    return;
+  }
   const b: number = Number(formData.get("b"));
   const c: number = Number(formData.get("c"));
   const d: number = Number(formData.get("d"));
   drawGraph(a, b, c, d);
 
-  const p: number = (3 * a * c - b * b) / (3 * a * a);
-  const q: number =
-    (27 * a * a * d - 9 * a * b * c + 2 * b * b * b) / (27 * a * a * a);
-  const shift: number = b / (3 * a); // Depressed cubic substitution: x = t - b/(3a)
-  const delta: number = (q * q) / 4 + (p * p * p) / 27;
-  pValue.textContent = p.toString();
-  qValue.textContent = q.toString();
-  discriminant.textContent = delta.toString();
+  const p = (3 * a * c - b * b) / (3 * a * a);
+  const q = (27 * a * a * d - 9 * a * b * c + 2 * b * b * b) / (27 * a * a * a);
+  const shift = b / (3 * a); // Depressed cubic substitution: x = t - b/(3a)
+  const delta = (q * q) / 4 + (p * p * p) / 27;
+  pValue.textContent = p.toFixed(5).toString();
+  qValue.textContent = q.toFixed(5).toString();
+  discriminant.textContent = delta.toFixed(5).toString();
   equation.textContent = equationFunction(a, b, c, d);
   if (Math.abs(delta) < 1e-12) {
     const u = Math.cbrt(-q / 2);
@@ -157,9 +159,9 @@ form.addEventListener("submit", (event) => {
     const root1 = 2 * u - shift;
     const doubleRoot = -u - shift;
 
-    strroot1.textContent = Number(root1.toFixed(12)).toString();
+    strroot1.textContent = Number(root1.toFixed(5)).toString();
     strroot2.textContent = strroot3.textContent = Number(
-      doubleRoot.toFixed(12),
+      doubleRoot.toFixed(5)
     ).toString();
     y1.textContent = y2.textContent = y3.textContent = "0";
     return;
@@ -171,7 +173,7 @@ form.addEventListener("submit", (event) => {
     const v = Math.cbrt(-q / 2 - sqrtDeltaReal);
     const t1: Complex = { re: u + v, im: 0 };
     const root1 = C.sub(t1, { re: shift, im: 0 });
-    strroot1.textContent = Number(root1.re.toFixed(12)).toString();
+    strroot1.textContent = Number(root1.re.toFixed(5)).toString();
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
     y1.textContent = "0";
@@ -186,9 +188,9 @@ form.addEventListener("submit", (event) => {
     const root1: Complex = C.sub(t1, { re: shift, im: 0 });
     const root2: Complex = C.sub(t2, { re: shift, im: 0 });
     const root3: Complex = C.sub(t3, { re: shift, im: 0 });
-    strroot1.textContent = Number(root1.re.toFixed(12)).toString();
-    strroot2.textContent = Number(root2.re.toFixed(12)).toString();
-    strroot3.textContent = Number(root3.re.toFixed(12)).toString();
+    strroot1.textContent = Number(root1.re.toFixed(5)).toString();
+    strroot2.textContent = Number(root2.re.toFixed(5)).toString();
+    strroot3.textContent = Number(root3.re.toFixed(5)).toString();
     y1.textContent = y2.textContent = y3.textContent = "0";
   }
 });
