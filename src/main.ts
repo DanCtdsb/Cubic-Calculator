@@ -180,7 +180,7 @@ form.addEventListener("submit", (event) => {
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
     y1.textContent = "0";
-    y2.textContent = y3.textContent = "complex root";
+    y2.textContent = y3.textContent = "imaginary";
   } else {
     const sqrtDelta: Complex = C.sqrt({ re: delta, im: 0 });
     const u: Complex = C.cbrt(C.add({ re: -q / 2, im: 0 }, sqrtDelta));
