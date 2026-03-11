@@ -81,11 +81,11 @@ const equationFunction = (a: number, b: number, c: number, d: number) => {
   t.push(a === 1 ? "x³" : `${a}x³`);
   if (b !== 0)
     t.push(
-      `${b > 0 ? "+" : "-"} ${Math.abs(b) === 1 ? "x²" : Math.abs(b) + "x²"}`
+      `${b > 0 ? "+" : "-"} ${Math.abs(b) === 1 ? "x²" : Math.abs(b) + "x²"}`,
     );
   if (c !== 0)
     t.push(
-      `${c > 0 ? "+" : "-"} ${Math.abs(c) === 1 ? "x" : Math.abs(c) + "x"}`
+      `${c > 0 ? "+" : "-"} ${Math.abs(c) === 1 ? "x" : Math.abs(c) + "x"}`,
     );
   if (d !== 0) t.push(`${d > 0 ? "+" : "-"} ${Math.abs(d)}`);
 
@@ -143,13 +143,17 @@ form.addEventListener("submit", (event) => {
   const b: number = Number(formData.get("b"));
   const c: number = Number(formData.get("c"));
   const d: number = Number(formData.get("d"));
+  if (isNaN(a) || isNaN(b) || isNaN(c) || isNaN(d)) {
+    equation.textContent = "Invalid input.";
+    return;
+  }
   drawGraph(a, b, c, d);
 
   const p = (3 * a * c - b * b) / (3 * a * a);
   const q = (27 * a * a * d - 9 * a * b * c + 2 * b * b * b) / (27 * a * a * a);
   const shift = b / (3 * a); // Depressed cubic substitution: x = t - b/(3a)
   const delta = (q * q) / 4 + (p * p * p) / 27;
-  pValue.textContent = p.toFixed(5).toString();
+  pValue.textContent = p.toFixed(5);
   qValue.textContent = q.toFixed(5).toString();
   discriminant.textContent = delta.toFixed(5).toString();
   equation.textContent = equationFunction(a, b, c, d);
@@ -159,10 +163,9 @@ form.addEventListener("submit", (event) => {
     const root1 = 2 * u - shift;
     const doubleRoot = -u - shift;
 
-    strroot1.textContent = Number(root1.toFixed(5)).toString();
-    strroot2.textContent = strroot3.textContent = Number(
-      doubleRoot.toFixed(5)
-    ).toString();
+    strroot1.textContent = root1.toFixed(5);
+    strroot2.textContent = strroot3.textContent = doubleRoot.toFixed(5);
+
     y1.textContent = y2.textContent = y3.textContent = "0";
     return;
   }
@@ -173,7 +176,7 @@ form.addEventListener("submit", (event) => {
     const v = Math.cbrt(-q / 2 - sqrtDeltaReal);
     const t1: Complex = { re: u + v, im: 0 };
     const root1 = C.sub(t1, { re: shift, im: 0 });
-    strroot1.textContent = Number(root1.re.toFixed(5)).toString();
+    strroot1.textContent = root1.re.toFixed(5);
     strroot2.textContent = "complex root";
     strroot3.textContent = "complex root";
     y1.textContent = "0";
@@ -188,9 +191,9 @@ form.addEventListener("submit", (event) => {
     const root1: Complex = C.sub(t1, { re: shift, im: 0 });
     const root2: Complex = C.sub(t2, { re: shift, im: 0 });
     const root3: Complex = C.sub(t3, { re: shift, im: 0 });
-    strroot1.textContent = Number(root1.re.toFixed(5)).toString();
-    strroot2.textContent = Number(root2.re.toFixed(5)).toString();
-    strroot3.textContent = Number(root3.re.toFixed(5)).toString();
+    strroot1.textContent = root1.re.toFixed(5);
+    strroot2.textContent = root2.re.toFixed(5);
+    strroot3.textContent = root3.re.toFixed(5);
     y1.textContent = y2.textContent = y3.textContent = "0";
   }
 });
